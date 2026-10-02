@@ -1,0 +1,25 @@
+@import '@astryxdesign/core/reset.css';
+@import '@astryxdesign/core/astryx.css';
+@import '@astryxdesign/theme-neutral/theme.css';
+@import '@eforge/tokens/styles.css';
+
+@layer eforge-base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-family-body, Inter, ui-sans-serif, system-ui, sans-serif);
+    color: var(--ef-color-text);
+    background: var(--ef-color-body);
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+}

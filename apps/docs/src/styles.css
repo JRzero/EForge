@@ -1,0 +1,5 @@
+.docs-root { padding: 32px; max-width: 1200px; margin: 0 auto; }
+.docs-card { grid-column: span 4; padding: 20px; border: 1px solid var(--ef-color-border); border-radius: var(--ef-radius-lg); background: var(--ef-color-surface); }
+.docs-card code { font-weight: 700; }
+.docs-card p { margin: 10px 0 0; color: var(--ef-color-text-muted); line-height: 1.5; }
+@media (max-width: 900px) { .docs-card { grid-column: span 12; } }
