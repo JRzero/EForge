@@ -1,5 +1,349 @@
-.docs-root { padding: 32px; max-width: 1200px; margin: 0 auto; }
-.docs-card { grid-column: span 4; padding: 20px; border: 1px solid var(--ef-color-border); border-radius: var(--ef-radius-lg); background: var(--ef-color-surface); }
-.docs-card code { font-weight: 700; }
-.docs-card p { margin: 10px 0 0; color: var(--ef-color-text-muted); line-height: 1.5; }
-@media (max-width: 900px) { .docs-card { grid-column: span 12; } }
+:root {
+  scroll-behavior: smooth;
+}
+
+.docs-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+}
+
+.docs-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 20px 16px;
+  border-right: 1px solid var(--ef-color-border);
+  background: var(--ef-color-surface);
+}
+
+.docs-brand {
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px 20px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.docs-brand strong {
+  font-size: 1.1rem;
+}
+
+.docs-brand span,
+.sidebar-note,
+.section-heading p,
+.catalog-card__guidance,
+.package-card p,
+.package-card dd,
+.agent-contract p {
+  color: var(--ef-color-text-muted);
+}
+
+.docs-sidebar nav {
+  display: grid;
+  gap: 4px;
+}
+
+.docs-sidebar nav a {
+  padding: 9px 10px;
+  border-radius: var(--ef-radius-md);
+  color: inherit;
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.docs-sidebar nav a:hover,
+.docs-sidebar nav a:focus-visible {
+  background: color-mix(in srgb, var(--ef-color-surface) 92%, var(--ef-color-text) 8%);
+  outline: none;
+}
+
+.sidebar-note {
+  margin-top: 24px;
+  padding: 12px;
+  border: 1px solid var(--ef-color-border);
+  border-radius: var(--ef-radius-md);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.docs-main {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 36px 0 72px;
+}
+
+.docs-section {
+  scroll-margin-top: 20px;
+  margin-top: 48px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+
+.section-heading--search {
+  align-items: center;
+}
+
+.section-kicker {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--ef-color-text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.section-heading p {
+  margin: 6px 0 0;
+  font-size: 0.875rem;
+}
+
+.guidance-grid,
+.package-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.package-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.guidance-card,
+.package-card,
+.catalog-card,
+.agent-contract {
+  border: 1px solid var(--ef-color-border);
+  border-radius: var(--ef-radius-lg);
+  background: var(--ef-color-surface);
+}
+
+.guidance-card {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  line-height: 1.5;
+  font-size: 0.875rem;
+}
+
+.guidance-card--positive {
+  border-left: 3px solid var(--ef-color-accent);
+}
+
+.guidance-card--negative {
+  border-left: 3px solid var(--ef-color-danger, #b42318);
+}
+
+.package-card {
+  padding: 18px;
+}
+
+.package-card > code {
+  font-weight: 700;
+}
+
+.package-card p {
+  margin: 10px 0 16px;
+  line-height: 1.55;
+}
+
+.package-card dl {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.package-card dl > div {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  gap: 10px;
+}
+
+.package-card dt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.package-card dd {
+  margin: 0;
+  font-size: 0.8125rem;
+}
+
+.catalog-list {
+  display: grid;
+  gap: 14px;
+}
+
+.catalog-card {
+  scroll-margin-top: 20px;
+  overflow: hidden;
+}
+
+.catalog-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--ef-color-border);
+}
+
+.catalog-card__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--ef-color-text-muted);
+  font-size: 0.75rem;
+}
+
+.catalog-card h3 {
+  margin: 8px 0 0;
+  font-size: 1rem;
+}
+
+.status-pill {
+  padding: 2px 7px;
+  border: 1px solid var(--ef-color-border);
+  border-radius: 999px;
+  background: var(--ef-color-body);
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+
+.status-pill--stable {
+  color: var(--ef-color-accent);
+}
+
+.status-pill--contract-only {
+  color: var(--ef-color-text-muted);
+}
+
+.import-list {
+  max-width: 45%;
+  color: var(--ef-color-text-muted);
+  text-align: right;
+  font-size: 0.75rem;
+}
+
+.catalog-card__guidance {
+  display: grid;
+  gap: 6px;
+  padding: 14px 20px;
+  font-size: 0.875rem;
+}
+
+.catalog-card__guidance p {
+  margin: 0;
+}
+
+.live-example {
+  padding: 18px 20px 20px;
+  border-top: 1px solid var(--ef-color-border);
+  background: color-mix(in srgb, var(--ef-color-body) 65%, var(--ef-color-surface) 35%);
+}
+
+.example-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.example-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.state-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.state-grid > * {
+  min-height: 120px;
+  border: 1px dashed var(--ef-color-border);
+  border-radius: var(--ef-radius-md);
+}
+
+.permission-fallback {
+  color: var(--ef-color-text-muted);
+  font-size: 0.8125rem;
+}
+
+.catalog-empty {
+  padding: 32px;
+  border: 1px dashed var(--ef-color-border);
+  border-radius: var(--ef-radius-lg);
+  color: var(--ef-color-text-muted);
+  text-align: center;
+}
+
+.agent-contract {
+  padding: 20px;
+}
+
+.agent-contract p {
+  margin: 10px 0 0;
+  line-height: 1.6;
+}
+
+@media (max-width: 960px) {
+  .docs-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .docs-sidebar {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--ef-color-border);
+  }
+
+  .docs-sidebar nav {
+    display: flex;
+    overflow-x: auto;
+  }
+
+  .sidebar-note {
+    display: none;
+  }
+
+  .guidance-grid,
+  .package-grid,
+  .state-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .docs-main {
+    width: min(100% - 28px, 1180px);
+    padding-top: 24px;
+  }
+
+  .section-heading,
+  .catalog-card__header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .import-list {
+    max-width: none;
+    text-align: left;
+  }
+}

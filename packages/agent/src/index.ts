@@ -1,65 +1,215 @@
+export type CatalogCategory =
+  | 'foundation'
+  | 'ui'
+  | 'data'
+  | 'form'
+  | 'pattern'
+  | 'infrastructure';
+
+export type CatalogStatus = 'stable' | 'preview' | 'contract-only';
+
 export interface CatalogEntry {
+  id: string;
   package: string;
   name: string;
-  category: 'foundation' | 'ui' | 'data' | 'form' | 'pattern' | 'infrastructure';
+  category: CatalogCategory;
+  status: CatalogStatus;
   useWhen: string;
   avoidWhen?: string;
+  imports: readonly string[];
+  docsAnchor: string;
 }
 
-export const foundationCatalog: readonly CatalogEntry[] = [
+export interface PackageCatalogEntry {
+  package: string;
+  purpose: string;
+  dependsOn: readonly string[];
+  consumers: string;
+}
+
+export const packageCatalog: readonly PackageCatalogEntry[] = [
   {
     package: '@eforge/ui',
-    name: 'Button',
-    category: 'ui',
-    useWhen: 'Rendering standard product actions.',
-  },
-  {
-    package: '@eforge/data',
-    name: 'DataTable',
-    category: 'data',
-    useWhen: 'Rendering enterprise tabular data with client pagination and standard states.',
-  },
-  {
-    package: '@eforge/data',
-    name: 'SearchBar',
-    category: 'data',
-    useWhen: 'Adding a standard accessible search field to list pages.',
-  },
-  {
-    package: '@eforge/forms',
-    name: 'useZodForm',
-    category: 'form',
-    useWhen: 'Building validated product forms backed by Zod.',
-  },
-  {
-    package: '@eforge/patterns',
-    name: 'ListPage',
-    category: 'pattern',
-    useWhen: 'Building search/filter/table list experiences.',
-  },
-  {
-    package: '@eforge/patterns',
-    name: 'DetailPage',
-    category: 'pattern',
-    useWhen: 'Building entity detail pages with optional secondary context.',
-  },
-  {
-    package: '@eforge/patterns',
-    name: 'WorkbenchPage',
-    category: 'pattern',
-    useWhen: 'Building dense three-pane enterprise or AI workspaces.',
+    purpose: 'Stable application-facing adapter over Astryx primitives.',
+    dependsOn: ['@astryxdesign/core', '@eforge/tokens'],
+    consumers: 'All React product applications.',
   },
   {
     package: '@eforge/core',
-    name: 'createHttpClient',
-    category: 'infrastructure',
-    useWhen: 'Calling JSON or multipart APIs with consistent auth/error handling.',
+    purpose: 'React-free HTTP, auth, permissions, storage, environment, flags, and logging primitives.',
+    dependsOn: [],
+    consumers: 'Browser apps and framework packages.',
+  },
+  {
+    package: '@eforge/forms',
+    purpose: 'React Hook Form and Zod integration with EForge field conventions.',
+    dependsOn: ['@eforge/ui'],
+    consumers: 'Validated product forms.',
+  },
+  {
+    package: '@eforge/data',
+    purpose: 'TanStack Query, tabular data, search, loading, empty, and error states.',
+    dependsOn: ['@eforge/ui'],
+    consumers: 'List pages and remote-data experiences.',
+  },
+  {
+    package: '@eforge/patterns',
+    purpose: 'Enterprise page composition and permission-aware rendering.',
+    dependsOn: ['@eforge/core'],
+    consumers: 'Application page shells and layouts.',
   },
   {
     package: '@eforge/schema-contract',
-    name: 'FieldDefinition',
-    category: 'foundation',
-    useWhen: 'Describing field metadata without introducing schema rendering.',
-    avoidWhen: 'Trying to implement a low-code renderer or visual builder.',
+    purpose: 'Type-only metadata contracts without a rendering runtime.',
+    dependsOn: [],
+    consumers: 'Products that need portable metadata definitions.',
+  },
+  {
+    package: '@eforge/agent',
+    purpose: 'Machine-readable package and component catalog for coding agents.',
+    dependsOn: [],
+    consumers: 'Codex, Claude Code, docs tooling, and human maintainers.',
   },
 ] as const;
+
+export const foundationCatalog: readonly CatalogEntry[] = [
+  {
+    id: 'ui-button',
+    package: '@eforge/ui',
+    name: 'Button',
+    category: 'ui',
+    status: 'stable',
+    useWhen: 'Rendering standard product actions.',
+    avoidWhen: 'The interaction is navigation; use the application router link primitive instead.',
+    imports: ['Button'],
+    docsAnchor: 'ui-button',
+  },
+  {
+    id: 'ui-input',
+    package: '@eforge/ui',
+    name: 'Input',
+    category: 'ui',
+    status: 'stable',
+    useWhen: 'Collecting short text values with accessible labels and validation state.',
+    imports: ['Input'],
+    docsAnchor: 'ui-input',
+  },
+  {
+    id: 'data-search-bar',
+    package: '@eforge/data',
+    name: 'SearchBar',
+    category: 'data',
+    status: 'stable',
+    useWhen: 'Adding an accessible search field to a list page.',
+    imports: ['SearchBar'],
+    docsAnchor: 'data-search-bar',
+  },
+  {
+    id: 'data-table',
+    package: '@eforge/data',
+    name: 'DataTable',
+    category: 'data',
+    status: 'stable',
+    useWhen: 'Rendering enterprise tabular data with standard loading, empty, pagination, and row interaction behavior.',
+    avoidWhen: 'The primary interaction is free-form editing or spreadsheet-style cell manipulation.',
+    imports: ['DataTable', 'ColumnDef'],
+    docsAnchor: 'data-table',
+  },
+  {
+    id: 'data-states',
+    package: '@eforge/data',
+    name: 'Data states',
+    category: 'data',
+    status: 'stable',
+    useWhen: 'Representing loading, empty, and recoverable error states consistently.',
+    imports: ['LoadingState', 'EmptyDataState', 'ErrorState'],
+    docsAnchor: 'data-states',
+  },
+  {
+    id: 'form-zod',
+    package: '@eforge/forms',
+    name: 'useZodForm',
+    category: 'form',
+    status: 'stable',
+    useWhen: 'Building validated product forms backed by a Zod schema.',
+    imports: ['useZodForm', 'FormTextField'],
+    docsAnchor: 'form-zod',
+  },
+  {
+    id: 'form-layout',
+    package: '@eforge/forms',
+    name: 'FormSection / FormActions',
+    category: 'form',
+    status: 'stable',
+    useWhen: 'Structuring enterprise forms into readable sections with a consistent action area.',
+    imports: ['FormSection', 'FormActions'],
+    docsAnchor: 'form-layout',
+  },
+  {
+    id: 'pattern-list-page',
+    package: '@eforge/patterns',
+    name: 'ListPage',
+    category: 'pattern',
+    status: 'stable',
+    useWhen: 'Building search, filter, table, and bulk-action list experiences.',
+    imports: ['ListPage'],
+    docsAnchor: 'pattern-list-page',
+  },
+  {
+    id: 'pattern-detail-page',
+    package: '@eforge/patterns',
+    name: 'DetailPage',
+    category: 'pattern',
+    status: 'stable',
+    useWhen: 'Building entity detail pages with optional secondary context.',
+    imports: ['DetailPage'],
+    docsAnchor: 'pattern-detail-page',
+  },
+  {
+    id: 'pattern-workbench-page',
+    package: '@eforge/patterns',
+    name: 'WorkbenchPage',
+    category: 'pattern',
+    status: 'stable',
+    useWhen: 'Building dense three-pane enterprise or AI workspaces.',
+    avoidWhen: 'A simpler list, detail, dashboard, or form page communicates the task clearly.',
+    imports: ['WorkbenchPage'],
+    docsAnchor: 'pattern-workbench-page',
+  },
+  {
+    id: 'pattern-permissions',
+    package: '@eforge/patterns',
+    name: 'PermissionGate',
+    category: 'pattern',
+    status: 'stable',
+    useWhen: 'Conditionally rendering UI based on product permissions.',
+    avoidWhen: 'Enforcing server-side authorization; UI permission checks are never a security boundary.',
+    imports: ['PermissionProvider', 'PermissionGate'],
+    docsAnchor: 'pattern-permissions',
+  },
+  {
+    id: 'core-http',
+    package: '@eforge/core',
+    name: 'createHttpClient',
+    category: 'infrastructure',
+    status: 'stable',
+    useWhen: 'Calling JSON or multipart APIs with consistent auth and error handling.',
+    imports: ['createHttpClient'],
+    docsAnchor: 'core-http',
+  },
+  {
+    id: 'schema-field-definition',
+    package: '@eforge/schema-contract',
+    name: 'FieldDefinition',
+    category: 'foundation',
+    status: 'contract-only',
+    useWhen: 'Describing field metadata that products may store or exchange.',
+    avoidWhen: 'Trying to implement a low-code renderer, expression engine, or visual builder.',
+    imports: ['FieldDefinition'],
+    docsAnchor: 'schema-field-definition',
+  },
+] as const;
+
+export function findCatalogEntry(id: string) {
+  return foundationCatalog.find(entry => entry.id === id);
+}

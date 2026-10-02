@@ -1,6 +1,6 @@
 {
   "name": "@eforge/docs",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,6 +9,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@eforge/agent": "workspace:*",
+    "@eforge/data": "workspace:*",
+    "@eforge/forms": "workspace:*",
     "@eforge/patterns": "workspace:*",
     "@eforge/ui": "workspace:*",
     "react": "^19.2.0",
