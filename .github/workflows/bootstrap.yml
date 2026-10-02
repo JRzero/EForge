@@ -27,6 +27,9 @@ jobs:
           s = p.read_text()
           s = s.replace("    await expect(client.get('/me')).rejects.toEqual(expect.objectContaining<HttpError>({status: 401}));", "    await expect(client.get('/me')).rejects.toBeInstanceOf(HttpError);")
           p.write_text(s)
+          p = Path('packages/forms/src/index.tsx')
+          s = p.read_text().replace("schema: z.ZodType<TValues>,", "schema: z.ZodType<TValues, TValues>,")
+          p.write_text(s)
           PY
           rm -rf .bootstrap
           rm -f .github/workflows/bootstrap.yml
