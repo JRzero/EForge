@@ -12,6 +12,8 @@ This repository is an enterprise frontend foundation optimized for human develop
 6. Do not add domain-specific components to the foundation until they are proven reusable across products.
 7. New public API must include documentation and verification coverage appropriate to its risk.
 8. Maintain keyboard and accessible-name behavior for interactive controls.
+9. Search `@eforge/agent` catalog metadata before introducing a new shared abstraction.
+10. Any new public EForge API must update machine-readable catalog metadata and human documentation in the same change.
 
 ## Preferred composition
 
@@ -32,6 +34,17 @@ pnpm astryx -- docs tokens
 ```
 
 If an Astryx API changes, adapt `@eforge/ui` and keep EForge consumers stable whenever practical.
+
+## Catalog and documentation
+
+The canonical machine-readable catalog is exported by `@eforge/agent`. The docs application renders this same metadata for humans.
+
+When adding a public API:
+- add or update its catalog entry
+- state when to use it and when not to use it when misuse is likely
+- keep package/import metadata accurate
+- add a live example when interaction behavior benefits from demonstration
+- add browser coverage for critical docs interactions
 
 ## Verification
 
