@@ -16,7 +16,7 @@ jobs:
 
       - name: Expand EForge source
         run: |
-          base64 -d .bootstrap/eforge-v0.1.tar.gz.b64 | tar -xzf -
+          cat .bootstrap/parts/part-* | base64 -d | tar -xzf -
           rm -rf .bootstrap
           rm -f .github/workflows/bootstrap.yml
 
