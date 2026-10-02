@@ -1,0 +1,15 @@
+@layer eforge-tokens {
+  :root {
+    --ef-color-text: var(--color-text-primary);
+    --ef-color-text-muted: var(--color-text-secondary);
+    --ef-color-surface: var(--color-background-surface);
+    --ef-color-body: var(--color-background-body);
+    --ef-color-border: var(--color-border);
+    --ef-color-accent: var(--color-accent);
+    --ef-radius-sm: var(--radius-inner);
+    --ef-radius-md: var(--radius-element);
+    --ef-radius-lg: var(--radius-container);
+    --ef-shadow-low: var(--shadow-low);
+    --ef-shadow-medium: var(--shadow-med);
+  }
+}

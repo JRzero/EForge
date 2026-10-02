@@ -1,0 +1,88 @@
+@layer eforge-data {
+  .ef-data-table {
+    overflow: hidden;
+    border: 1px solid var(--ef-color-border);
+    border-radius: var(--ef-radius-lg);
+    background: var(--ef-color-surface);
+  }
+
+  .ef-data-table__scroll {
+    overflow-x: auto;
+  }
+
+  .ef-data-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  .ef-data-table th,
+  .ef-data-table td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--ef-color-border);
+    vertical-align: middle;
+  }
+
+  .ef-data-table th {
+    color: var(--ef-color-text-muted);
+    font-weight: 600;
+    background: color-mix(in srgb, var(--ef-color-surface) 92%, var(--ef-color-text) 8%);
+  }
+
+  .ef-data-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .ef-data-table tbody tr[data-clickable] {
+    cursor: pointer;
+  }
+
+  .ef-data-table tbody tr[data-clickable]:hover,
+  .ef-data-table tbody tr[data-clickable]:focus-visible {
+    background: color-mix(in srgb, var(--ef-color-surface) 94%, var(--ef-color-accent) 6%);
+    outline: none;
+  }
+
+  .ef-data-table__pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-top: 1px solid var(--ef-color-border);
+    color: var(--ef-color-text-muted);
+    font-size: 0.8125rem;
+  }
+
+  .ef-data-table__pagination-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .ef-data-state {
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 24px;
+    text-align: center;
+    color: var(--ef-color-text-muted);
+  }
+
+  .ef-data-state strong {
+    color: var(--ef-color-text);
+  }
+
+  .ef-data-state--compact {
+    min-height: 72px;
+    flex-direction: row;
+    padding: 12px;
+  }
+
+  .ef-data-state--empty {
+    min-height: 120px;
+  }
+}

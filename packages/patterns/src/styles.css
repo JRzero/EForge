@@ -1,0 +1,178 @@
+@layer eforge-patterns {
+  .ef-app-shell {
+    --ef-sidebar-width: 240px;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: var(--ef-sidebar-width) minmax(0, 1fr);
+    background: var(--ef-color-body);
+  }
+
+  .ef-app-shell__sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--ef-color-border);
+    background: var(--ef-color-surface);
+  }
+
+  .ef-app-shell__brand {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--ef-color-border);
+    font-weight: 700;
+  }
+
+  .ef-app-shell__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px;
+    overflow-y: auto;
+  }
+
+  .ef-app-shell__main {
+    min-width: 0;
+  }
+
+  .ef-app-shell__header {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 24px;
+    border-bottom: 1px solid var(--ef-color-border);
+    background: color-mix(in srgb, var(--ef-color-surface) 96%, transparent);
+    backdrop-filter: blur(8px);
+  }
+
+  .ef-app-shell__content {
+    padding: 24px;
+  }
+
+  .ef-page {
+    display: grid;
+    gap: 20px;
+  }
+
+  .ef-page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .ef-page-header__copy {
+    min-width: 0;
+  }
+
+  .ef-page-header h1 {
+    margin: 0;
+    font-size: clamp(1.35rem, 2vw, 1.75rem);
+    line-height: 1.2;
+  }
+
+  .ef-page-header p {
+    margin: 8px 0 0;
+    color: var(--ef-color-text-muted);
+    max-width: 72ch;
+  }
+
+  .ef-page-header__eyebrow {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--ef-color-text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .ef-page-header__meta {
+    margin-top: 10px;
+    color: var(--ef-color-text-muted);
+    font-size: 0.8125rem;
+  }
+
+  .ef-page-header__actions,
+  .ef-list-page__filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ef-list-page__filters {
+    justify-content: space-between;
+    padding: 12px;
+    border: 1px solid var(--ef-color-border);
+    border-radius: var(--ef-radius-lg);
+    background: var(--ef-color-surface);
+  }
+
+  .ef-detail-page__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
+    gap: 20px;
+  }
+
+  .ef-detail-page__sidebar,
+  .ef-form-page__body,
+  .ef-workbench-page__main,
+  .ef-workbench-page__side {
+    border: 1px solid var(--ef-color-border);
+    border-radius: var(--ef-radius-lg);
+    background: var(--ef-color-surface);
+  }
+
+  .ef-detail-page__sidebar,
+  .ef-form-page__body,
+  .ef-workbench-page__main,
+  .ef-workbench-page__side {
+    padding: 20px;
+  }
+
+  .ef-form-page__footer {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--ef-color-border);
+  }
+
+  .ef-dashboard-page__grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .ef-workbench-page__grid {
+    display: grid;
+    grid-template-columns: minmax(180px, 240px) minmax(0, 1fr) minmax(220px, 320px);
+    gap: 16px;
+  }
+
+  @media (max-width: 900px) {
+    .ef-app-shell {
+      grid-template-columns: 1fr;
+    }
+
+    .ef-app-shell__sidebar {
+      position: static;
+      height: auto;
+      border-right: 0;
+      border-bottom: 1px solid var(--ef-color-border);
+    }
+
+    .ef-app-shell__nav {
+      flex-direction: row;
+      overflow-x: auto;
+    }
+
+    .ef-detail-page__grid,
+    .ef-workbench-page__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
