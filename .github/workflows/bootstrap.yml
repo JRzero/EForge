@@ -20,8 +20,7 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           p = Path('.github/workflows/ci.yml')
-          s = p.read_text()
-          s = s.replace("      - uses: pnpm/action-setup@v4\n        with:\n          version: 10\n", "      - uses: pnpm/action-setup@v4\n")
+          s = p.read_text().replace("      - uses: pnpm/action-setup@v4\n        with:\n          version: 10\n", "      - uses: pnpm/action-setup@v4\n")
           p.write_text(s)
 
           p = Path('packages/core/src/http.test.ts')
@@ -36,15 +35,11 @@ jobs:
           s = p.read_text().replace("tsup src/index.ts --format esm --dts --clean", "tsup src/index.tsx --format esm --dts --clean")
           p.write_text(s)
 
-          p = Path('playwright.config.ts')
-          s = p.read_text().replace("retries: process.env.CI ? 2 : 0,", "retries: 0,")
-          p.write_text(s)
-
           p = Path('tests/e2e/admin-demo.spec.ts')
           s = p.read_text()
-          old = "  await page.getByLabel('Search users').fill('Nora');"
-          new = "  const search = page.getByLabel('Search users');\n  console.log('SEARCH_DIAG', {visible: await search.isVisible(), enabled: await search.isEnabled(), editable: await search.isEditable(), dom: await search.evaluate(el => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el); const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2); const ancestors = []; let node: Element | null = el; for (let i = 0; node && i < 7; i++, node = node.parentElement) { ancestors.push({tag: node.tagName, ariaDisabled: node.getAttribute('aria-disabled'), inert: node.hasAttribute('inert'), hidden: node.hasAttribute('hidden')}); } return {rect: {x:r.x,y:r.y,width:r.width,height:r.height}, display:s.display, visibility:s.visibility, opacity:s.opacity, pointerEvents:s.pointerEvents, matchesDisabled: el.matches(':disabled'), matchesReadOnly: el.matches(':read-only'), top: top ? {tag: top.tagName, cls: top.getAttribute('class'), same: top === el} : null, ancestors}; })});\n  expect(await search.isEditable()).toBe(true);\n  await search.fill('Nora');"
-          s = s.replace(old, new)
+          s = s.replace("  await page.getByLabel('Search users').fill('Nora');", "  const search = page.getByLabel('Search users');\n  await search.click();\n  await search.pressSequentially('Nora');")
+          s = s.replace("  await page.getByLabel('Search users').fill('does-not-exist');", "  await search.press('Control+A');\n  await search.pressSequentially('does-not-exist');")
+          s = s.replace("  await page.getByLabel('Organization name').fill('EForge Enterprise');", "  const organization = page.getByLabel('Organization name');\n  await organization.click();\n  await organization.press('Control+A');\n  await organization.pressSequentially('EForge Enterprise');")
           p.write_text(s)
           PY
           rm -rf .bootstrap
