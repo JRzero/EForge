@@ -17,12 +17,17 @@ jobs:
       - name: Expand EForge source
         run: |
           cat .bootstrap/parts/part-* | base64 -d | tar -xzf -
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('.github/workflows/ci.yml')
+          s = p.read_text()
+          s = s.replace("      - uses: pnpm/action-setup@v4\n        with:\n          version: 10\n", "      - uses: pnpm/action-setup@v4\n")
+          p.write_text(s)
+          PY
           rm -rf .bootstrap
           rm -f .github/workflows/bootstrap.yml
 
       - uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       - uses: actions/setup-node@v4
         with:
