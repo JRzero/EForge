@@ -40,6 +40,13 @@ jobs:
           s = s.replace("import {useState, type KeyboardEvent, type ReactNode} from 'react';", "import {useMemo, useState, type KeyboardEvent, type ReactNode} from 'react';")
           s = s.replace("  const table = useReactTable({\n    data: [...data],", "  const tableData = useMemo(() => [...data], [data]);\n\n  const table = useReactTable({\n    data: tableData,")
           p.write_text(s)
+
+          p = Path('tests/e2e/admin-demo.spec.ts')
+          s = p.read_text()
+          s = s.replace("  await page.getByLabel('Search users').fill('Nora');", "  const search = page.getByRole('textbox', {name: 'Search users'});\n  await search.fill('Nora');")
+          s = s.replace("  await page.getByLabel('Search users').fill('does-not-exist');", "  await search.fill('does-not-exist');")
+          s = s.replace("  await expect(page.getByLabel('Organization name')).toHaveValue('EForge Labs');\n  await page.getByLabel('Organization name').fill('EForge Enterprise');\n  await expect(page.getByLabel('Organization name')).toHaveValue('EForge Enterprise');", "  const organization = page.getByRole('textbox', {name: 'Organization name'});\n  await expect(organization).toHaveValue('EForge Labs');\n  await organization.fill('EForge Enterprise');\n  await expect(organization).toHaveValue('EForge Enterprise');")
+          p.write_text(s)
           PY
           rm -rf .bootstrap
           rm -f .github/workflows/bootstrap.yml
