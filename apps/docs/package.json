@@ -9,6 +9,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@eforge/agent": "workspace:*",
+    "@eforge/data": "workspace:*",
     "@eforge/patterns": "workspace:*",
     "@eforge/ui": "workspace:*",
     "react": "^19.2.0",
