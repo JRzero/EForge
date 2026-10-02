@@ -1,0 +1,59 @@
+name: bootstrap-and-verify
+
+on:
+  push:
+    branches: ['feat/foundation-v0.1']
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Expand EForge source
+        run: |
+          base64 -d .bootstrap/eforge-v0.1.tar.gz.b64 | tar -xzf -
+          rm -rf .bootstrap
+          rm -f .github/workflows/bootstrap.yml
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.16.0
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Browser verification
+        run: pnpm test:e2e
+
+      - name: Commit verified foundation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat: build EForge enterprise frontend foundation v0.1"
+          git push
