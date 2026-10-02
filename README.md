@@ -36,7 +36,7 @@ It is deliberately **not** a low-code runtime. EForge keeps the application code
 
 ## Applications
 
-- `apps/docs` — architecture and package documentation surface
+- `apps/docs` — searchable live component catalog rendered from `@eforge/agent` metadata
 - `apps/playground` — component integration sandbox
 - `examples/admin-demo` — reference enterprise application used for end-to-end validation
 
@@ -84,8 +84,8 @@ export function App() {
 
 ## Governance
 
-See `ARCHITECTURE.md`, `docs/component-governance.md`, and `AGENTS.md` before adding framework capabilities. Business-specific components must not be promoted into EForge solely for convenience.
+See `ARCHITECTURE.md`, `docs/component-governance.md`, `docs/component-catalog.md`, `docs/agent-development.md`, and `AGENTS.md` before adding framework capabilities. Business-specific components must not be promoted into EForge solely for convenience.
 
 ## Status
 
-`v0.1` establishes the foundation and validates it with a representative admin application. Rich editors, workflows, charts, low-code rendering, and business-domain packages are intentionally deferred until real product usage proves the abstraction.
+`v0.2` turns the foundation into a documented, searchable component system: the live docs site and coding agents consume the same `@eforge/agent` catalog metadata, and both the admin reference app and docs surface are browser-verified. Rich editors, workflows, charts, low-code rendering, and business-domain packages remain deferred until real product usage proves the abstraction.
