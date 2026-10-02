@@ -30,6 +30,9 @@ jobs:
           p = Path('packages/forms/src/index.tsx')
           s = p.read_text().replace("schema: z.ZodType<TValues>,", "schema: z.ZodType<TValues, TValues>,")
           p.write_text(s)
+          p = Path('packages/forms/package.json')
+          s = p.read_text().replace("tsup src/index.ts --format esm --dts --clean", "tsup src/index.tsx --format esm --dts --clean")
+          p.write_text(s)
           PY
           rm -rf .bootstrap
           rm -f .github/workflows/bootstrap.yml
