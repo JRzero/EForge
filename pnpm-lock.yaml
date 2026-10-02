@@ -59,6 +59,12 @@ importers:
 
   apps/docs:
     dependencies:
+      '@eforge/agent':
+        specifier: workspace:*
+        version: link:../../packages/agent
+      '@eforge/data':
+        specifier: workspace:*
+        version: link:../../packages/data
       '@eforge/patterns':
         specifier: workspace:*
         version: link:../../packages/patterns
