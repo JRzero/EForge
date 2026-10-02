@@ -35,11 +35,10 @@ jobs:
           s = p.read_text().replace("tsup src/index.ts --format esm --dts --clean", "tsup src/index.tsx --format esm --dts --clean")
           p.write_text(s)
 
-          p = Path('tests/e2e/admin-demo.spec.ts')
+          p = Path('packages/data/src/index.tsx')
           s = p.read_text()
-          s = s.replace("  await page.getByLabel('Search users').fill('Nora');", "  const search = page.getByLabel('Search users');\n  await search.click();\n  await search.pressSequentially('Nora');")
-          s = s.replace("  await page.getByLabel('Search users').fill('does-not-exist');", "  await search.press('Control+A');\n  await search.pressSequentially('does-not-exist');")
-          s = s.replace("  await page.getByLabel('Organization name').fill('EForge Enterprise');", "  const organization = page.getByLabel('Organization name');\n  await organization.click();\n  await organization.press('Control+A');\n  await organization.pressSequentially('EForge Enterprise');")
+          s = s.replace("import {useState, type KeyboardEvent, type ReactNode} from 'react';", "import {useMemo, useState, type KeyboardEvent, type ReactNode} from 'react';")
+          s = s.replace("  const table = useReactTable({\n    data: [...data],", "  const tableData = useMemo(() => [...data], [data]);\n\n  const table = useReactTable({\n    data: tableData,")
           p.write_text(s)
           PY
           rm -rf .bootstrap
