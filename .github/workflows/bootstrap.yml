@@ -33,6 +33,15 @@ jobs:
           p = Path('packages/forms/package.json')
           s = p.read_text().replace("tsup src/index.ts --format esm --dts --clean", "tsup src/index.tsx --format esm --dts --clean")
           p.write_text(s)
+          p = Path('playwright.config.ts')
+          s = p.read_text().replace("retries: process.env.CI ? 2 : 0,", "retries: 0,")
+          p.write_text(s)
+          p = Path('tests/e2e/admin-demo.spec.ts')
+          s = p.read_text().replace(
+              "  await page.getByLabel('Search users').fill('Nora');",
+              "  const search = page.getByLabel('Search users');\n  console.log('SEARCH_DIAG', await search.evaluate(el => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return {rect: {x:r.x,y:r.y,width:r.width,height:r.height}, display:s.display, visibility:s.visibility, opacity:s.opacity, pointerEvents:s.pointerEvents, disabled:(el as HTMLInputElement).disabled, readOnly:(el as HTMLInputElement).readOnly}; }));\n  await search.fill('Nora');"
+          )
+          p.write_text(s)
           PY
           rm -rf .bootstrap
           rm -f .github/workflows/bootstrap.yml
