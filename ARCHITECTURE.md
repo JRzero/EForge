@@ -6,6 +6,9 @@
 Business Application
         │
         ▼
+@eforge/app        application runtime + route metadata
+        │
+        ▼
 @eforge/patterns   enterprise page patterns
 @eforge/data       query + tabular data behavior
 @eforge/forms      forms + validation behavior
@@ -31,6 +34,7 @@ Cross-cutting packages:
 - Product code MUST import Astryx components through `@eforge/ui`.
 - `@eforge/ui` MAY depend on Astryx. Other EForge packages SHOULD depend on `@eforge/ui`, not Astryx.
 - `@eforge/core` stays React-free.
+- `@eforge/app` owns route metadata, browser navigation adapters, generated navigation/breadcrumbs, and route-level permission UX. It must not own product loaders, backend authorization, or domain workflow state.
 - `@eforge/schema-contract` contains no renderer, expression engine, event bus, or data-scope runtime.
 - `@eforge/patterns` contains reusable page composition, never domain nouns such as Customer, ESGMetric, or ProjectApproval.
 - Business components are promoted only after repeated use demonstrates a stable abstraction.
@@ -44,6 +48,7 @@ The public EForge package APIs are the compatibility boundary. Astryx is current
 - Remote/server state: TanStack Query.
 - Form state: React Hook Form.
 - Authentication state: `@eforge/core` observable auth store.
+- Route/location state: `@eforge/app` through an `AppRouterAdapter`.
 - Local view state: React state first; introduce a dedicated state library only when a concrete cross-tree use case requires it.
 
 ## Schema position
