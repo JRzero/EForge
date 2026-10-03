@@ -1,7 +1,14 @@
 import {StrictMode, useMemo, useState} from 'react';
 import {createRoot} from 'react-dom/client';
-import {Button, EForgeProvider, Input} from '@eforge/ui';
-import {DataTable, EForgeQueryProvider, SearchBar, type ColumnDef} from '@eforge/data';
+import {Button, EForgeProvider, Input, Selector} from '@eforge/ui';
+import {
+  DataTable,
+  EForgeQueryProvider,
+  FilterBar,
+  SearchBar,
+  useListQueryState,
+  type ColumnDef,
+} from '@eforge/data';
 import {
   AppShell,
   DashboardPage,
@@ -23,6 +30,11 @@ type User = {
   email: string;
   role: string;
   status: 'Active' | 'Invited';
+};
+
+type UserFilters = {
+  role: string;
+  status: string;
 };
 
 const users: User[] = [
@@ -80,31 +92,130 @@ function Dashboard() {
       ))}
       <article className="activity-card">
         <h2>Foundation coverage</h2>
-        <p>This demo validates page patterns, permissions, Astryx-backed UI, data table behavior, responsive layout, and standard states.</p>
+        <p>This demo validates page patterns, permissions, Astryx-backed UI, controlled list query state, server-style pagination, sorting, selection, and column visibility.</p>
       </article>
     </DashboardPage>
   );
 }
 
 function UsersPage() {
-  const [query, setQuery] = useState('');
-  const filtered = useMemo(() => {
-    const normalized = query.trim().toLowerCase();
-    if (!normalized) return users;
-    return users.filter(user => `${user.name} ${user.email} ${user.role} ${user.status}`.toLowerCase().includes(normalized));
-  }, [query]);
+  const query = useListQueryState<UserFilters>({
+    filters: {role: 'All roles', status: 'All statuses'},
+    pageSize: 5,
+  });
+
+  const filteredAndSorted = useMemo(() => {
+    const normalized = query.state.search.trim().toLowerCase();
+    const rows = users.filter(user => {
+      const matchesSearch =
+        !normalized ||
+        `${user.name} ${user.email} ${user.role} ${user.status}`
+          .toLowerCase()
+          .includes(normalized);
+      const matchesRole =
+        query.state.filters.role === 'All roles' ||
+        user.role === query.state.filters.role;
+      const matchesStatus =
+        query.state.filters.status === 'All statuses' ||
+        user.status === query.state.filters.status;
+      return matchesSearch && matchesRole && matchesStatus;
+    });
+
+    const sort = query.state.sorting[0];
+    if (!sort) return rows;
+
+    const key = sort.id as keyof User;
+    return [...rows].sort((left, right) => {
+      const result = String(left[key]).localeCompare(String(right[key]));
+      return sort.desc ? -result : result;
+    });
+  }, [query.state.filters, query.state.search, query.state.sorting]);
+
+  const pageCount = Math.max(
+    1,
+    Math.ceil(filteredAndSorted.length / query.state.pagination.pageSize),
+  );
+  const start =
+    query.state.pagination.pageIndex * query.state.pagination.pageSize;
+  const pageRows = filteredAndSorted.slice(
+    start,
+    start + query.state.pagination.pageSize,
+  );
+
+  const activeFilterCount =
+    Number(query.state.filters.role !== 'All roles') +
+    Number(query.state.filters.status !== 'All statuses');
 
   return (
     <ListPage
       title="Users"
-      description="Searchable, paginated enterprise list pattern."
+      description="Enterprise list infrastructure with query state, server-style pagination, sorting, selection, and column visibility."
       actions={
         <PermissionGate permission="user:create">
           <Button label="New user" variant="primary" />
         </PermissionGate>
       }
-      filters={<SearchBar label="Search users" value={query} onChange={setQuery} placeholder="Search name, email or role" />}>
-      <DataTable data={filtered} columns={columns} pageSize={5} getRowId={row => row.id} emptyText="No users match this search" />
+      filters={
+        <FilterBar
+          search={
+            <SearchBar
+              label="Search users"
+              value={query.state.search}
+              onChange={query.setSearch}
+              placeholder="Search name, email, role or status"
+              width="100%"
+            />
+          }
+          activeCount={activeFilterCount}
+          onClear={() =>
+            query.setFilters({role: 'All roles', status: 'All statuses'})
+          }>
+          <Selector
+            label="Role filter"
+            options={['All roles', 'Administrator', 'Editor', 'Analyst', 'Viewer']}
+            value={query.state.filters.role}
+            onChange={value =>
+              query.setFilters({
+                ...query.state.filters,
+                role: value ?? 'All roles',
+              })
+            }
+            width={160}
+          />
+          <Selector
+            label="Status filter"
+            options={['All statuses', 'Active', 'Invited']}
+            value={query.state.filters.status}
+            onChange={value =>
+              query.setFilters({
+                ...query.state.filters,
+                status: value ?? 'All statuses',
+              })
+            }
+            width={150}
+          />
+        </FilterBar>
+      }>
+      <DataTable
+        data={pageRows}
+        columns={columns}
+        getRowId={row => row.id}
+        getRowSelectionLabel={row => `Select ${row.name}`}
+        emptyText="No users match this query"
+        paginationState={query.state.pagination}
+        onPaginationChange={query.setPagination}
+        manualPagination
+        pageCount={pageCount}
+        sortable
+        sorting={query.state.sorting}
+        onSortingChange={query.setSorting}
+        manualSorting
+        selectable
+        showColumnVisibility
+        renderBulkActions={({count}) => (
+          <Button label={`Archive ${count}`} size="sm" variant="secondary" />
+        )}
+      />
     </ListPage>
   );
 }
