@@ -13,7 +13,7 @@ test('admin reference app covers enterprise list infrastructure', async ({page})
   await page.getByRole('button', {name: 'Users'}).click();
   await expect(page.getByRole('heading', {name: 'Users'})).toBeVisible();
   await expect(page.getByRole('button', {name: 'New user'})).toBeVisible();
-  await expect(page.getByText('Alice Chen')).toBeVisible();
+  await expect(page.getByRole('cell', {name: 'Alice Chen', exact: true})).toBeVisible();
   await expect(page.getByText('Page 1 of 3')).toBeVisible();
 
   await page.getByRole('button', {name: 'Next'}).click();
