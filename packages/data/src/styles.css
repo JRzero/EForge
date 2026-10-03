@@ -1,9 +1,64 @@
 @layer eforge-data {
+  .ef-filter-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid var(--ef-color-border);
+    border-radius: var(--ef-radius-lg);
+    background: var(--ef-color-surface);
+  }
+
+  .ef-filter-bar__search {
+    flex: 1 1 280px;
+    min-width: min(100%, 220px);
+  }
+
+  .ef-filter-bar__fields,
+  .ef-filter-bar__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ef-filter-bar__actions {
+    margin-inline-start: auto;
+  }
+
+  .ef-filter-bar__count {
+    color: var(--ef-color-text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
   .ef-data-table {
     overflow: hidden;
     border: 1px solid var(--ef-color-border);
     border-radius: var(--ef-radius-lg);
     background: var(--ef-color-surface);
+  }
+
+  .ef-data-table__toolbar {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--ef-color-border);
+    background: color-mix(in srgb, var(--ef-color-surface) 96%, var(--ef-color-text) 4%);
+  }
+
+  .ef-data-table__selection-summary {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 0.8125rem;
   }
 
   .ef-data-table__scroll {
@@ -30,6 +85,39 @@
     background: color-mix(in srgb, var(--ef-color-surface) 92%, var(--ef-color-text) 8%);
   }
 
+  .ef-data-table__sort {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: inherit;
+    cursor: pointer;
+  }
+
+  .ef-data-table__sort:focus-visible {
+    outline: 2px solid var(--ef-color-accent);
+    outline-offset: 3px;
+    border-radius: var(--ef-radius-sm, 4px);
+  }
+
+  .ef-data-table__sort-indicator {
+    color: var(--ef-color-text-muted);
+    font-size: 0.75rem;
+  }
+
+  .ef-data-table__selection-control {
+    width: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .ef-data-table tbody tr:last-child td {
     border-bottom: 0;
   }
@@ -39,9 +127,25 @@
   }
 
   .ef-data-table tbody tr[data-clickable]:hover,
-  .ef-data-table tbody tr[data-clickable]:focus-visible {
+  .ef-data-table tbody tr[data-clickable]:focus-visible,
+  .ef-data-table tbody tr[data-selected] {
     background: color-mix(in srgb, var(--ef-color-surface) 94%, var(--ef-color-accent) 6%);
-    outline: none;
+  }
+
+  .ef-data-table tbody tr[data-clickable]:focus-visible {
+    outline: 2px solid var(--ef-color-accent);
+    outline-offset: -2px;
+  }
+
+  .ef-column-visibility {
+    display: grid;
+    gap: 8px;
+    min-width: 180px;
+  }
+
+  .ef-column-visibility > strong {
+    margin-bottom: 2px;
+    font-size: 0.8125rem;
   }
 
   .ef-data-table__pagination {
@@ -84,5 +188,27 @@
 
   .ef-data-state--empty {
     min-height: 120px;
+  }
+
+  @media (max-width: 720px) {
+    .ef-filter-bar {
+      align-items: stretch;
+    }
+
+    .ef-filter-bar__search,
+    .ef-filter-bar__fields,
+    .ef-filter-bar__actions {
+      width: 100%;
+    }
+
+    .ef-filter-bar__actions {
+      margin-inline-start: 0;
+    }
+
+    .ef-data-table__toolbar,
+    .ef-data-table__pagination {
+      align-items: flex-start;
+      flex-direction: column;
+    }
   }
 }

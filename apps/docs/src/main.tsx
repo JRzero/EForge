@@ -66,7 +66,7 @@ function DocsApp() {
       <aside className="docs-sidebar">
         <a className="docs-brand" href="#top">
           <strong>EForge</strong>
-          <span>v0.2 catalog</span>
+          <span>v0.3 catalog</span>
         </a>
         <nav aria-label="Documentation sections">
           <a href="#principles">Principles</a>
@@ -81,7 +81,7 @@ function DocsApp() {
 
       <main className="docs-main" id="top">
         <PageHeader
-          eyebrow="EForge v0.2"
+          eyebrow="EForge v0.3"
           title="Enterprise component catalog"
           description="Human-readable and agent-readable contracts for building consistent enterprise React products."
           meta={<span>{foundationCatalog.length} public catalog entries · {packageCatalog.length} packages</span>}

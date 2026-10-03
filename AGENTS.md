@@ -15,7 +15,9 @@ This repository is an enterprise frontend foundation optimized for human develop
 
 ## Preferred composition
 
-- Enterprise list page: `ListPage` + `SearchBar` + `DataTable`.
+- Enterprise list page: `ListPage` + `FilterBar` + `useListQueryState` + `DataTable`.
+- Server-backed lists: control `paginationState` and `sorting`, set `manualPagination` / `manualSorting`, provide a stable `getRowId`, and keep request execution in product code or TanStack Query.
+- Bulk selection: use `DataTable` selection APIs; do not treat UI selection as authorization or as proof that unloaded rows are available client-side.
 - Forms: `useZodForm` + `FormTextField` + `FormActions`.
 - Permission-aware UI: `PermissionProvider` + `PermissionGate`.
 - Remote data: `EForgeQueryProvider` and TanStack Query.
