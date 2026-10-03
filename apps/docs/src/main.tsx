@@ -32,11 +32,9 @@ function GuidanceCard({
 }
 
 function ComponentExample({id}: {id: string}) {
-  if (id === 'ui-button' || id === 'ui-input') return <UiExamples />;
-  if (id === 'data-search-bar' || id === 'data-table' || id === 'data-states') {
-    return <DataExamples />;
-  }
-  if (id === 'form-zod' || id === 'form-layout') return <FormExamples />;
+  if (id === 'ui-button') return <UiExamples />;
+  if (id === 'data-table') return <DataExamples />;
+  if (id === 'form-layout') return <FormExamples />;
   if (id === 'pattern-permissions') return <PermissionExamples />;
   return null;
 }
