@@ -12,9 +12,12 @@ This repository is an enterprise frontend foundation optimized for human develop
 6. Do not add domain-specific components to the foundation until they are proven reusable across products.
 7. New public API must include documentation and verification coverage appropriate to its risk.
 8. Maintain keyboard and accessible-name behavior for interactive controls.
+9. Treat the application route config as the source of truth for menu visibility, breadcrumbs, and route-level UI permissions. Do not duplicate those rules in product navigation.
 
 ## Preferred composition
 
+- Application bootstrap: `defineAppRoutes` + `EForgeApplication`; use `useAppRuntime` / `AppLink` for in-app navigation.
+- Route permissions only control frontend visibility/access UX. Backend authorization remains mandatory.
 - Enterprise list page: `ListPage` + `FilterBar` + `useListQueryState` + `DataTable`.
 - Server-backed lists: control `paginationState` and `sorting`, set `manualPagination` / `manualSorting`, provide a stable `getRowId`, and keep request execution in product code or TanStack Query.
 - Bulk selection: use `DataTable` selection APIs; do not treat UI selection as authorization or as proof that unloaded rows are available client-side.
@@ -43,4 +46,4 @@ Before declaring a task complete run:
 pnpm verify
 ```
 
-At minimum, changes must pass lint, TypeScript, unit tests, all package/app builds, and Playwright admin-demo smoke tests.
+At minimum, changes must pass lint, TypeScript, unit tests, all package/app builds, and Playwright reference application and documentation tests.

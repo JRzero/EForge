@@ -9,9 +9,9 @@ test('docs catalog is searchable and enterprise data examples remain interactive
   await expect(page.getByText('@eforge/ui', {exact: true}).first()).toBeVisible();
 
   const search = page.getByRole('textbox', {name: 'Search component catalog'});
-  await search.fill('useListQueryState');
+  await search.fill('EForgeApplication');
 
-  await expect(page.getByRole('heading', {name: 'useListQueryState'})).toBeVisible();
+  await expect(page.getByRole('heading', {name: 'EForgeApplication'})).toBeVisible();
   await expect(page.getByRole('heading', {name: 'Button'})).toHaveCount(0);
 
   await search.fill('');

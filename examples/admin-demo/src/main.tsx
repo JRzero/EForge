@@ -1,5 +1,12 @@
 import {StrictMode, useMemo, useState} from 'react';
 import {createRoot} from 'react-dom/client';
+import {
+  AppLink,
+  EForgeApplication,
+  defineAppRoutes,
+  useAppRuntime,
+  type AppRoutePageProps,
+} from '@eforge/app';
 import {Button, EForgeProvider, Input, Selector} from '@eforge/ui';
 import {
   DataTable,
@@ -10,19 +17,17 @@ import {
   type ColumnDef,
 } from '@eforge/data';
 import {
-  AppShell,
   DashboardPage,
+  DetailPage,
   FormPage,
   ListPage,
   PermissionGate,
-  PermissionProvider,
 } from '@eforge/patterns';
 import '@eforge/ui/styles.css';
 import '@eforge/data/styles.css';
 import '@eforge/patterns/styles.css';
+import '@eforge/app/styles.css';
 import './styles.css';
-
-type View = 'dashboard' | 'users' | 'settings';
 
 type User = {
   id: string;
@@ -62,16 +67,6 @@ const columns: ColumnDef<User>[] = [
   },
 ];
 
-function Navigation({view, setView}: {view: View; setView(view: View): void}) {
-  return (
-    <>
-      <Button label="Dashboard" variant={view === 'dashboard' ? 'secondary' : 'ghost'} width="100%" onClick={() => setView('dashboard')} />
-      <Button label="Users" variant={view === 'users' ? 'secondary' : 'ghost'} width="100%" onClick={() => setView('users')} />
-      <Button label="Settings" variant={view === 'settings' ? 'secondary' : 'ghost'} width="100%" onClick={() => setView('settings')} />
-    </>
-  );
-}
-
 function Dashboard() {
   const metrics = [
     ['Active users', '128', '+12 this month'],
@@ -79,10 +74,11 @@ function Dashboard() {
     ['API health', '99.98%', 'Last 30 days'],
     ['Feature flags', '6', '2 staged'],
   ] as const;
+
   return (
     <DashboardPage
       title="Dashboard"
-      description="Reference enterprise dashboard built only from EForge public APIs.">
+      description="Reference enterprise dashboard bootstrapped by EForge application runtime.">
       {metrics.map(([label, value, detail]) => (
         <article className="metric-card" key={label}>
           <span>{label}</span>
@@ -92,13 +88,14 @@ function Dashboard() {
       ))}
       <article className="activity-card">
         <h2>Foundation coverage</h2>
-        <p>This demo validates page patterns, permissions, Astryx-backed UI, controlled list query state, server-style pagination, sorting, selection, and column visibility.</p>
+        <p>Navigation, route metadata, permissions, breadcrumbs, list infrastructure, Astryx-backed UI, and browser history are all driven through EForge public APIs.</p>
       </article>
     </DashboardPage>
   );
 }
 
 function UsersPage() {
+  const {navigate} = useAppRuntime();
   const query = useListQueryState<UserFilters>({
     filters: {role: 'All roles', status: 'All statuses'},
     pageSize: 5,
@@ -149,7 +146,7 @@ function UsersPage() {
   return (
     <ListPage
       title="Users"
-      description="Enterprise list infrastructure with query state, server-style pagination, sorting, selection, and column visibility."
+      description="Enterprise list infrastructure inside the EForge application runtime."
       actions={
         <PermissionGate permission="user:create">
           <Button label="New user" variant="primary" />
@@ -212,6 +209,7 @@ function UsersPage() {
         manualSorting
         selectable
         showColumnVisibility
+        onRowClick={row => navigate(`/users/${row.id}`)}
         renderBulkActions={({count}) => (
           <Button label={`Archive ${count}`} size="sm" variant="secondary" />
         )}
@@ -220,12 +218,43 @@ function UsersPage() {
   );
 }
 
+function UserDetailPage({params}: AppRoutePageProps) {
+  const user = users.find(candidate => candidate.id === params.id);
+
+  if (!user) {
+    return (
+      <DetailPage
+        title="User not found"
+        description="The user id exists in the route but not in this demo dataset.">
+        <AppLink to="/users">Back to users</AppLink>
+      </DetailPage>
+    );
+  }
+
+  return (
+    <DetailPage
+      title={user.name}
+      description="Dynamic route matched by /users/:id."
+      sidebar={
+        <div className="detail-meta">
+          <strong>Status</strong>
+          <span>{user.status}</span>
+        </div>
+      }>
+      <div className="detail-grid">
+        <div><strong>Email</strong><span>{user.email}</span></div>
+        <div><strong>Role</strong><span>{user.role}</span></div>
+      </div>
+    </DetailPage>
+  );
+}
+
 function SettingsPage() {
   const [organization, setOrganization] = useState('EForge Labs');
   return (
     <FormPage
       title="Settings"
-      description="A standard form page with stable spacing and content width."
+      description="A standard form page reached through generated application navigation."
       footer={<Button label="Save settings" variant="primary" />}>
       <Input label="Organization name" value={organization} onChange={setOrganization} width="100%" />
       <Input label="API region" value="ap-southeast-1" onChange={() => undefined} width="100%" isReadOnly />
@@ -233,19 +262,66 @@ function SettingsPage() {
   );
 }
 
-function AdminDemo() {
-  const [view, setView] = useState<View>('dashboard');
+function AuditPage() {
   return (
-    <PermissionProvider permissions={['user:read', 'user:create', 'settings:read']}>
-      <AppShell
-        brand={<span>EForge <small>Admin</small></span>}
-        navigation={<Navigation view={view} setView={setView} />}
-        header={<div className="user-chip" aria-label="Signed in user">JR · Admin</div>}>
-        {view === 'dashboard' && <Dashboard />}
-        {view === 'users' && <UsersPage />}
-        {view === 'settings' && <SettingsPage />}
-      </AppShell>
-    </PermissionProvider>
+    <ListPage
+      title="Audit log"
+      description="This route is protected by audit:read and should not render for the demo user.">
+      <p>Protected content</p>
+    </ListPage>
+  );
+}
+
+const routes = defineAppRoutes([
+  {
+    id: 'dashboard',
+    path: '/',
+    title: 'Dashboard',
+    navigation: {label: 'Dashboard', order: 0},
+    component: Dashboard,
+  },
+  {
+    id: 'users',
+    path: '/users',
+    title: 'Users',
+    navigation: {label: 'Users', order: 1},
+    access: {permission: 'user:read'},
+    component: UsersPage,
+  },
+  {
+    id: 'user-detail',
+    path: '/users/:id',
+    title: 'User detail',
+    parentId: 'users',
+    access: {permission: 'user:read'},
+    component: UserDetailPage,
+  },
+  {
+    id: 'settings',
+    path: '/settings',
+    title: 'Settings',
+    navigation: {label: 'Settings', order: 2},
+    access: {permission: 'settings:read'},
+    component: SettingsPage,
+  },
+  {
+    id: 'audit',
+    path: '/audit',
+    title: 'Audit',
+    navigation: {label: 'Audit', order: 3},
+    access: {permission: 'audit:read'},
+    component: AuditPage,
+  },
+] as const);
+
+function AdminDemo() {
+  return (
+    <EForgeApplication
+      routes={routes}
+      permissions={['user:read', 'user:create', 'settings:read']}
+      brand={<span>EForge <small>Admin</small></span>}
+      header={<div className="user-chip" aria-label="Signed in user">JR · Admin</div>}
+    />
   );
 }
 

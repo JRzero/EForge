@@ -42,11 +42,29 @@ The goal of v0.3 is to make list pages production-capable without introducing do
 - admin reference app upgraded to server-style list behavior
 - unit and browser verification for the new state and interactions
 
+## v0.4 Application runtime
+
+The goal of v0.4 is to remove another repeated enterprise-app setup layer without coupling EForge to a third-party router.
+
+- `@eforge/app` package
+- typed `defineAppRoutes` configuration
+- dynamic `:param` and wildcard path matching
+- browser-history and memory router adapters
+- generated permission-aware navigation
+- parent-route breadcrumbs
+- active navigation inherited by child routes
+- route-level permission guard
+- standard 403 and 404 states
+- `useAppRuntime` and `AppLink`
+- admin reference app migrated from local view state to URLs
+- unit tests for matching/config validation/router adapter
+- browser verification for navigation, dynamic routes, 403, and 404
+
 ## Candidate later capabilities
 
 Only after real product usage validates need:
 
-- route integration adapters and URL serialization
+- optional React Router adapter and URL query serialization
 - file upload UI patterns
 - notification provider
 - i18n message layer

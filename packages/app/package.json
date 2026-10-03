@@ -1,0 +1,31 @@
+{
+  "name": "@eforge/app",
+  "version": "0.1.0",
+  "type": "module",
+  "sideEffects": ["**/*.css"],
+  "files": ["dist", "src/styles.css"],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": "./src/styles.css"
+  },
+  "scripts": {
+    "build": "tsup src/index.tsx --format esm --dts --clean",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@eforge/core": "workspace:*",
+    "@eforge/patterns": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=19.0.0"
+  },
+  "devDependencies": {
+    "react": "^19.2.0"
+  }
+}

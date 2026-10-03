@@ -1,0 +1,118 @@
+@layer eforge-app {
+  .ef-app-nav {
+    display: grid;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ef-app-nav__link {
+    display: flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 7px 10px;
+    border-radius: var(--ef-radius-md);
+    color: var(--ef-color-text);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .ef-app-nav__link:hover,
+  .ef-app-nav__link:focus-visible {
+    background: color-mix(
+      in srgb,
+      var(--ef-color-surface) 92%,
+      var(--ef-color-text) 8%
+    );
+    outline: none;
+  }
+
+  .ef-app-nav__link[aria-current='page'] {
+    background: color-mix(
+      in srgb,
+      var(--ef-color-surface) 88%,
+      var(--ef-color-accent) 12%
+    );
+    color: var(--ef-color-text);
+  }
+
+  .ef-app-breadcrumbs {
+    margin-bottom: 14px;
+  }
+
+  .ef-app-breadcrumbs ol {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--ef-color-text-muted);
+    font-size: 0.75rem;
+  }
+
+  .ef-app-breadcrumbs li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .ef-app-breadcrumbs li:not(:last-child)::after {
+    content: '/';
+    color: var(--ef-color-border);
+  }
+
+  .ef-app-breadcrumbs a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .ef-app-breadcrumbs a:hover,
+  .ef-app-breadcrumbs a:focus-visible {
+    color: var(--ef-color-text);
+    text-decoration: underline;
+  }
+
+  .ef-runtime-state {
+    min-height: min(520px, 65vh);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 620px;
+    gap: 10px;
+  }
+
+  .ef-runtime-state__code {
+    color: var(--ef-color-text-muted);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+  }
+
+  .ef-runtime-state h1 {
+    margin: 0;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .ef-runtime-state p {
+    margin: 0;
+    color: var(--ef-color-text-muted);
+    line-height: 1.6;
+  }
+
+  .ef-runtime-state__link {
+    margin-top: 8px;
+    color: var(--ef-color-accent);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .ef-runtime-state__link:hover,
+  .ef-runtime-state__link:focus-visible {
+    text-decoration: underline;
+  }
+}

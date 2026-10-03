@@ -2,6 +2,7 @@ export type CatalogCategory =
   | 'foundation'
   | 'ui'
   | 'data'
+  | 'application'
   | 'form'
   | 'pattern'
   | 'infrastructure';
@@ -39,6 +40,12 @@ export const packageCatalog: readonly PackageCatalogEntry[] = [
     purpose: 'React-free HTTP, auth, permissions, storage, environment, flags, and logging primitives.',
     dependsOn: [],
     consumers: 'Browser apps and framework packages.',
+  },
+  {
+    package: '@eforge/app',
+    purpose: 'Route metadata, router adapters, generated navigation, breadcrumbs, route permissions, and browser application bootstrap.',
+    dependsOn: ['@eforge/core', '@eforge/patterns'],
+    consumers: 'Enterprise browser applications.',
   },
   {
     package: '@eforge/forms',
@@ -146,6 +153,38 @@ export const foundationCatalog: readonly CatalogEntry[] = [
     useWhen: 'Representing loading, empty, and recoverable error states consistently.',
     imports: ['LoadingState', 'EmptyDataState', 'ErrorState'],
     docsAnchor: 'data-states',
+  },
+  {
+    id: 'app-runtime',
+    package: '@eforge/app',
+    name: 'EForgeApplication',
+    category: 'application',
+    status: 'stable',
+    useWhen: 'Bootstrapping an enterprise browser application from one route configuration that drives navigation, breadcrumbs, route guards, and 403/404 handling.',
+    avoidWhen: 'Embedding one isolated widget that does not own application navigation.',
+    imports: ['EForgeApplication', 'defineAppRoutes'],
+    docsAnchor: 'app-runtime',
+  },
+  {
+    id: 'app-router-adapter',
+    package: '@eforge/app',
+    name: 'AppRouterAdapter',
+    category: 'application',
+    status: 'stable',
+    useWhen: 'Integrating EForge application runtime with browser history, tests, or a future external routing adapter.',
+    avoidWhen: 'Adding product-specific routing semantics directly to the foundation.',
+    imports: ['AppRouterAdapter', 'createBrowserRouterAdapter', 'createMemoryRouterAdapter'],
+    docsAnchor: 'app-router-adapter',
+  },
+  {
+    id: 'app-runtime-hooks',
+    package: '@eforge/app',
+    name: 'useAppRuntime / AppLink',
+    category: 'application',
+    status: 'stable',
+    useWhen: 'Navigating from page code or reading current route metadata and dynamic route params.',
+    imports: ['useAppRuntime', 'AppLink'],
+    docsAnchor: 'app-runtime-hooks',
   },
   {
     id: 'form-zod',

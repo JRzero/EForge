@@ -47,3 +47,21 @@ For server-backed tables:
 - remember that `selectedRows` only contains selected rows loaded into the current table model; use `selectedRowIds` for cross-page identity
 
 Do not add backend-specific query syntax, URL routing rules, or domain filters to `@eforge/data`.
+
+
+## Application runtime
+
+`@eforge/app` owns cross-product browser application concerns that are otherwise repeatedly rebuilt: route metadata, a router-adapter contract, generated navigation, breadcrumbs, route permission UX, and standard 403/404 states.
+
+The route table is the frontend source of truth for these concerns. Product code should not maintain a second menu configuration with duplicated labels and permissions.
+
+Keep the runtime deliberately small:
+
+- route paths and metadata belong in EForge application config
+- page components remain product code
+- route permission rules are UI guards, never a backend security boundary
+- browser-history integration is provided through `AppRouterAdapter`
+- product-specific loaders, backend query syntax, workflow state, and domain navigation policy stay outside the foundation
+- dynamic breadcrumbs that require entity data should be composed in product code until a reusable async metadata contract is proven
+
+Do not turn `@eforge/app` into a replacement for mature routing ecosystems. Its adapter boundary exists so a React Router or other adapter can be added later without changing product route metadata.
