@@ -2,7 +2,7 @@
 
 EForge is an AI-native enterprise React frontend foundation for building scalable business applications.
 
-It is deliberately **not** a low-code runtime. EForge keeps the application code-first while standardizing the capabilities that every enterprise product repeatedly rebuilds: design tokens, UI adapters, HTTP/auth/permission primitives, forms, data tables, page patterns, and AI-coding rules.
+It is deliberately **not** a low-code runtime. EForge keeps the application code-first while standardizing the capabilities that every enterprise product repeatedly rebuilds: design tokens, UI adapters, HTTP/auth/permission primitives, forms, data tables, page patterns, application routing metadata, and AI-coding rules.
 
 ## Principles
 
@@ -28,6 +28,7 @@ It is deliberately **not** a low-code runtime. EForge keeps the application code
 | `@eforge/tokens` | Stable semantic design-token aliases |
 | `@eforge/ui` | Astryx adapter and EForge provider |
 | `@eforge/core` | HTTP, auth, permissions, storage, logging, flags, environment |
+| `@eforge/app` | Route config, router adapters, generated navigation/breadcrumbs, route guards, 403/404 |
 | `@eforge/forms` | React Hook Form + Zod integration and form primitives |
 | `@eforge/data` | Query client, searchable/paginated data table, data states |
 | `@eforge/patterns` | Enterprise page/layout patterns and permission gate |
@@ -88,4 +89,4 @@ See `ARCHITECTURE.md`, `docs/component-governance.md`, and `AGENTS.md` before ad
 
 ## Status
 
-`v0.1` establishes the foundation and validates it with a representative admin application. Rich editors, workflows, charts, low-code rendering, and business-domain packages are intentionally deferred until real product usage proves the abstraction.
+`v0.4` adds a lightweight application runtime on top of the component, data, and page-pattern foundation. Rich editors, workflows, charts, low-code rendering, and business-domain packages remain intentionally deferred until real product usage proves the abstraction.
