@@ -20,14 +20,14 @@
   },
   "dependencies": {
     "@eforge/ui": "workspace:*",
-    "@hookform/resolvers": "^5.0.0",
-    "react-hook-form": "^7.50.0",
-    "zod": "^4.0.0"
+    "@hookform/resolvers": "^6.0.0",
+    "react-hook-form": "^7.90.0",
+    "zod": "^4.6.7"
   },
   "peerDependencies": {
     "react": ">=19.0.0"
   },
   "devDependencies": {
-    "react": "^19.2.0"
+    "react": "^19.3.1"
   }
 }
